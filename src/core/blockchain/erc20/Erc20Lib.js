@@ -13,7 +13,7 @@ class Erc20Lib extends EthLib {
     }
 
     composeContract() {
-        return new this.web3.eth.Contract(ERC20_ABI, this.getContractAddress());
+        return new this.provider.eth.Contract(ERC20_ABI, this.getContractAddress());
     }
 
     getContractAddress() {
@@ -44,6 +44,7 @@ class Erc20Lib extends EthLib {
     getBalance(address){
         return new Promise(async(resolve, reject) => {
             try{
+                this.validator.validateAddress(address);
                 let balance = await this.getContract().methods.balanceOf(address).call();
                 balance = this.toDecimals(balance);
                 return resolve(balance);
