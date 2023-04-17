@@ -21,19 +21,9 @@ class BtcLib extends AbstractCurrencyLab{
         let validator = new BtcValidator();
         let converter = new BtcConverter();
         let provider = new BlockcypherProvider(app,validator,converter);
-        super(provider,validator,converter);
+        super(app, provider,validator,converter);
     }
 
-    getAddress(){
-        return new Promise(async(resolve,reject)=>{
-            try{
-                console.log("btcLib getAddress",BTC_ADDRESS);
-                return resolve(BTC_ADDRESS);
-            }catch(e){
-                return reject(e);
-            }
-        })
-    };
 
     getBalance(address){
         return new Promise(async(resolve,reject)=>{
@@ -70,7 +60,8 @@ class BtcLib extends AbstractCurrencyLab{
         return new Promise(async(resolve,reject)=>{
             try {
                 console.log("btc lib createSignRawTx");
-                let keyring = await ECPair.fromWIF(BTC_WIF,BTCNETWORK);
+                let privKey = await this.getPrivateKey();
+                let keyring = ECPair.fromWIF(privKey,BTCNETWORK);
                 console.log("keyring",keyring);
                 console.log("btcLib txb")
                 let txb = new TransactionBuilder(BTCNETWORK);

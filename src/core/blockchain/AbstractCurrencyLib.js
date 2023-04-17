@@ -2,28 +2,38 @@ const Validator = require('/src/core/validators/Validator');
 const staticValidator = new Validator();
 
 class AbstractCurrencyLib{
-    constructor(provider,validator,converter) {
+    constructor(app, provider,validator,converter) {
         staticValidator.validateObject(provider,"provider");
         staticValidator.validateObject(validator,"validator");
         staticValidator.validateObject(converter,"converter");
+        this.app = app;
         this.provider = provider;
         this.validator = validator;
         this.converter = converter;
     }
+
     getAddress(){
         return new Promise(async(resolve,reject)=>{
             try{
-                throw("getAddress() not implemented")
+                let address = await this.getCredentials().getAddress();
+                console.log("AbstractCurrencyLib getAddress",address)
+                return resolve(address);
         }catch(e){
                 return reject(e);
             }
         })
     };
 
+    getCredentials(){
+        return this.app.blockchain.credentials;
+    }
+
     getPrivateKey(){
         return new Promise(async(resolve,reject)=>{
             try{
-                throw("getPrivateKey() not implemented")
+                let privKey = await this.getCredentials().getPrivateKey();
+                console.log("AbstractCurrencyLib privKey",privKey)
+                return resolve(privKey);
             }catch(e){
                 return reject(e);
             }

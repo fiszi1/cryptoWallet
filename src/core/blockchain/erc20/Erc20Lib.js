@@ -6,8 +6,8 @@ const GAS_LIMIT = 300000;
 const contractAddress = process.env.ERC20_CONTRACT_ADDRESS;
 
 class Erc20Lib extends EthLib {
-    constructor() {
-        super();
+    constructor(app) {
+        super(app);
         this.setContract();
         this.converter = new Erc20Converter();
     }
